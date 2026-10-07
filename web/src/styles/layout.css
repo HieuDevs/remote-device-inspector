@@ -1,0 +1,71 @@
+/* main splits into the viewer area and the dockable DevTools panel. The
+   panel docks to any side: dock-side (left/right) or dock-band (top/bottom)
+   sets the axis; dock-left / dock-top move the panel before the viewer. */
+main { flex: 1; display: flex; min-height: 0; min-width: 0; }
+.app.dock-side main { flex-direction: row; }
+.app.dock-band main { flex-direction: column; }
+.app.dock-left #net, .app.dock-top #net { order: -1; }
+.viewer { flex: 1; display: flex; min-width: 0; min-height: 0; padding: 12px; gap: 12px; justify-content: center; align-items: flex-start; overflow: auto; }
+
+#stage { position: relative; display: inline-flex; max-width: 100%; max-height: 100%; }
+#screen { max-width: 100%; max-height: calc(100vh - 90px); width: auto; height: auto; background: #000; border-radius: 12px; touch-action: none; outline: none; cursor: none; }
+#screen:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
+#overlay { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: 12px; }
+#cursor { position: absolute; left: 0; top: 0; width: 26px; height: 26px; margin: -13px 0 0 -13px; opacity: 0; transition: opacity .15s, transform .06s ease-out; will-change: transform; }
+#cursor::before { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1.5px rgba(37,99,235,.9), 0 2px 8px rgba(0,0,0,.45); }
+#cursor::after { content: ""; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: #2563eb; box-shadow: 0 0 4px rgba(37,99,235,.9); }
+#stage.active #cursor { opacity: 1; }
+#cursor.press { transform: scale(.7); }
+.ripple { position: absolute; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; border: 2px solid var(--accent); background: rgba(37,99,235,.18); animation: ripple .5s ease-out forwards; }
+@keyframes ripple { from { transform: scale(.3); opacity: 1; } to { transform: scale(1.5); opacity: 0; } }
+
+/* ===== DevTools panel ===== */
+#net { position: relative; background: var(--panel); display: flex; flex-direction: column; min-height: 0; min-width: 0; flex: 0 0 auto; }
+#net.hidden { display: none; }
+.app.dock-side #net { width: 560px; height: auto; }
+.app.dock-band #net { width: auto; height: 46vh; }
+.app.dock-right #net { border-left: 1px solid var(--line); }
+.app.dock-left #net { border-right: 1px solid var(--line); }
+.app.dock-bottom #net { border-top: 1px solid var(--line); }
+.app.dock-top #net { border-bottom: 1px solid var(--line); }
+
+/* Outer resizer — the panel's edge facing the viewer. Highlighted & clear with grip handle. */
+#netResize { position: absolute; z-index: 10; display: flex; align-items: center; justify-content: center; transition: background .15s; }
+.app.dock-side #netResize { top: 0; width: 10px; height: 100%; cursor: col-resize; }
+.app.dock-band #netResize { left: 0; height: 10px; width: 100%; cursor: row-resize; }
+.app.dock-right #netResize { left: -5px; }
+.app.dock-left #netResize { right: -5px; }
+.app.dock-bottom #netResize { top: -5px; }
+.app.dock-top #netResize { bottom: -5px; }
+/* Visible line track */
+#netResize::before { content: ""; position: absolute; background: color-mix(in srgb, var(--line) 75%, var(--accent) 25%); transition: background .15s, box-shadow .15s, width .15s, height .15s; }
+.app.dock-side #netResize::before { left: 4px; top: 0; width: 2px; height: 100%; }
+.app.dock-band #netResize::before { top: 4px; left: 0; height: 2px; width: 100%; }
+/* Grab handle pill */
+#netResize::after { content: ""; position: absolute; background: var(--muted); border-radius: 999px; opacity: .8; transition: all .15s ease; box-shadow: 0 0 0 1.5px var(--panel), 0 1px 3px rgba(0,0,0,.2); }
+.app.dock-side #netResize::after { left: 2px; top: 50%; transform: translateY(-50%); width: 6px; height: 38px; }
+.app.dock-band #netResize::after { top: 2px; left: 50%; transform: translateX(-50%); height: 6px; width: 38px; }
+/* Hover and drag highlight */
+#netResize:hover, #netResize.drag { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+#netResize:hover::before, #netResize.drag::before { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+.app.dock-side #netResize:hover::before, .app.dock-side #netResize.drag::before { width: 3px; left: 3.5px; }
+.app.dock-band #netResize:hover::before, .app.dock-band #netResize.drag::before { height: 3px; top: 3.5px; }
+#netResize:hover::after, #netResize.drag::after { background: var(--accent); opacity: 1; box-shadow: 0 0 0 1.5px var(--panel), 0 0 10px var(--accent); }
+.app.dock-side #netResize:hover::after, .app.dock-side #netResize.drag::after { width: 8px; height: 48px; left: 1px; }
+.app.dock-band #netResize:hover::after, .app.dock-band #netResize.drag::after { height: 8px; width: 48px; top: 1px; }
+
+/* 4-way position pickers (panel and detail position, in the ⋯ menu) */
+.pos-pick { display: inline-flex; align-items: center; gap: 1px; padding: 2px; border: 1px solid var(--line); border-radius: 8px; background: var(--soft); }
+.pos-pick button { border: none; background: transparent; color: var(--muted); width: 24px; height: 22px; padding: 0; border-radius: 6px; font-size: 13px; line-height: 1; cursor: pointer; }
+.pos-pick button:hover { color: var(--fg); background: var(--soft2); }
+.pos-pick button.on { background: var(--accent); color: #fff; }
+
+/* Debug mode layout */
+.app.debug-mode .viewer { display: none !important; }
+.app.debug-mode #net { display: flex !important; flex: 1; width: auto !important; height: auto !important; border: none; }
+.app.debug-mode #netResize { display: none; }
+
+/* Global dragging states to prevent text selection and cursor flickering */
+body.resizing-col { cursor: col-resize !important; user-select: none !important; }
+body.resizing-row { cursor: row-resize !important; user-select: none !important; }
+body.resizing-active { user-select: none !important; cursor: nwse-resize !important; }

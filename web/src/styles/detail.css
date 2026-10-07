@@ -1,0 +1,49 @@
+/* Detail pane */
+.detail-head { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--panel); z-index: 2; }
+.detail-head .dh-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; flex: 1; }
+.tabs { display: flex; gap: 2px; padding: 6px 10px 0; border-bottom: 1px solid var(--line); position: sticky; top: 41px; background: var(--panel); z-index: 1; }
+.tab { padding: 6px 12px; border: 1px solid transparent; border-bottom: none; border-radius: 7px 7px 0 0; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--muted); margin-bottom: -1px; }
+.tab:hover { color: var(--fg); }
+.tab.on { background: var(--soft); color: var(--fg); border-color: var(--line); }
+.tabpane { padding: 12px; display: none; }
+.tabpane.on { display: block; }
+.kv { display: grid; grid-template-columns: 136px 1fr; gap: 5px 10px; font-size: 12px; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; word-break: break-all; }
+.enc { margin-top: 12px; padding: 10px 12px; border-radius: 10px; font-size: 12px; line-height: 1.5; }
+.enc.locked { background: color-mix(in srgb, var(--warn) 12%, transparent); color: var(--warn); }
+.enc.open { background: color-mix(in srgb, var(--ok) 12%, transparent); color: var(--ok); }
+.sec-title { font-weight: 700; margin: 14px 0 6px; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+.sec-title:first-child { margin-top: 0; }
+.hdrs .h { display: grid; grid-template-columns: 190px 1fr; gap: 3px 10px; font-size: 12px; }
+.hdrs .h dt { color: var(--muted); word-break: break-all; }
+.hdrs .h dd { margin: 0; word-break: break-all; }
+pre.body { margin: 0; padding: 10px 12px; background: var(--soft); border: 1px solid var(--line); border-radius: 10px; max-height: 320px; overflow: auto; white-space: pre-wrap; word-break: break-word; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; line-height: 1.55; }
+.copy { float: right; padding: 2px 9px; font-size: 11px; border-radius: 6px; text-transform: none; letter-spacing: 0; font-weight: 600; }
+.copy.done { color: var(--ok); border-color: var(--ok); }
+.sec-title .count { font-weight: 600; color: var(--muted); background: var(--soft2); border-radius: 999px; padding: 0 6px; margin-left: 4px; }
+/* Request / Response tabs: status + headers on the left, body on the right,
+   split by a draggable gutter (--msg-left, saved). Each column scrolls on
+   its own; they stack when the detail pane is narrow. */
+.net-detail { container-type: inline-size; --msg-left: 38%; }
+.net-detail .tabpane.msg-pane.on { display: grid; grid-template-columns: minmax(160px, var(--msg-left)) 7px minmax(0, 1fr); flex: 1 1 auto; min-height: 0; padding: 0; }
+.msg-pane > .msg-hint { grid-column: 1 / -1; padding: 12px; }
+.msg-col { min-width: 0; min-height: 0; overflow: auto; padding: 12px; }
+.msg-left { background: color-mix(in srgb, var(--soft) 45%, var(--panel)); }
+.msg-left .hdrs .h { grid-template-columns: minmax(90px, 40%) 1fr; }
+.msg-gutter { position: relative; cursor: col-resize; background: var(--line); border-left: 3px solid var(--panel); border-right: 3px solid var(--panel); transition: background .15s; touch-action: none; }
+.msg-gutter::after { content: ""; position: absolute; left: 50%; top: 50%; width: 5px; height: 36px; transform: translate(-50%, -50%); border-radius: 999px; background: var(--muted); opacity: .6; }
+.msg-gutter:hover, .msg-gutter.drag { background: var(--accent); }
+.msg-gutter:hover::after, .msg-gutter.drag::after { background: var(--accent); opacity: 1; box-shadow: 0 0 8px var(--accent); }
+.msg-right { display: flex; flex-direction: column; }
+.msg-right > .body-wrap { flex: 1; min-height: 0; }
+.msg-right .bview { flex: 1; min-height: 120px; max-height: none; }
+.msg-status { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; }
+.msg-status .mono { word-break: break-all; }
+@container (max-width: 560px) {
+  .net-detail .tabpane.msg-pane.on { grid-template-columns: minmax(0, 1fr); overflow: auto; }
+  .msg-gutter { display: none; }
+  .msg-col { overflow: visible; }
+  .msg-left { border-bottom: 1px solid var(--line); }
+  .msg-right .bview { max-height: 480px; }
+}

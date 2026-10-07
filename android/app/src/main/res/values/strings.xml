@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Remote Agent</string>
+    <string name="tagline">Remote support — you stay in control</string>
+    <string name="control_service_label">Remote Agent – remote control</string>
+    <string name="control_service_description">Lets your supporter tap, swipe and type on this device while you share your screen. Only works during a sharing session.</string>
+    <string name="session_code">Session code</string>
+    <string name="copy_code">Copy code</string>
+    <string name="share_code">Send code…</string>
+    <string name="copied">Session code copied</string>
+    <string name="share_text">Remote Device support session code: %1$s</string>
+    <string name="features">Permissions</string>
+    <string name="control_title">Remote control</string>
+    <string name="on">On</string>
+    <string name="server_label">Relay server</string>
+    <string name="server_hint">host:port</string>
+    <string name="server_help">Emulator or phone on USB: use 127.0.0.1:7000 (adb reverse is set up). Remote: enter the relay\'s domain and the app uses wss. Can only be changed while not sharing.</string>
+    <string name="footer">You can stop at any time from the notification.</string>
+    <string name="start">Start sharing</string>
+    <string name="stop">Stop sharing</string>
+    <string name="enable_control">Turn on</string>
+    <string name="notification_channel">Screen sharing</string>
+    <string name="notification_title">Sharing your screen</string>
+</resources>

@@ -1,0 +1,165 @@
+/* Toolbar */
+.net-tools { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.rec { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.rec .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--err); box-shadow: 0 0 0 3px color-mix(in srgb, var(--err) 25%, transparent); animation: pulse 1.6s ease-in-out infinite; }
+.rec.off .dot { background: var(--muted); box-shadow: none; animation: none; }
+@keyframes pulse { 50% { box-shadow: 0 0 0 5px color-mix(in srgb, var(--err) 8%, transparent); } }
+#appFilter { font: inherit; padding: 4px 6px; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); color: inherit; max-width: 150px; }
+
+/* Body: list + inner resizer + detail. Right dock stacks them vertically
+   (narrow), bottom dock places them side by side (wide) — like DevTools. */
+.net-body { flex: 1; display: flex; min-height: 0; min-width: 0; }
+.app.detail-col .net-body { flex-direction: column; }
+.app.detail-row .net-body { flex-direction: row; }
+/* detail-top / detail-left put the detail before the list. */
+.app.detail-top .net-detail, .app.detail-left .net-detail { order: 0; }
+.app.detail-top #splitResize, .app.detail-left #splitResize { order: 1; }
+.app.detail-top .net-list, .app.detail-left .net-list { order: 2; }
+.net-list { flex: 1 1 0; overflow: auto; min-width: 0; min-height: 0; }
+.net-detail { flex: 0 0 auto; background: var(--panel); overflow: auto; display: none; flex-direction: column; }
+.net-detail.open { display: flex; }
+.app.detail-col .net-detail { width: auto; height: 52%; min-height: 160px; }
+.app.detail-row .net-detail { width: 46%; height: auto; min-width: 300px; }
+
+/* Inner resizer between list and detail; axis follows the dock. Clear, highlighted divider bar. */
+#splitResize { flex: 0 0 9px; background: var(--soft2); position: relative; display: none; align-items: center; justify-content: center; transition: background .15s, border-color .15s; z-index: 3; }
+.app.detail-open #splitResize { display: flex; }
+.app.detail-col #splitResize { cursor: row-resize; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.app.detail-row #splitResize { cursor: col-resize; border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+/* Centered grab pill handle */
+#splitResize::after { content: ""; position: absolute; background: var(--muted); border-radius: 999px; opacity: .75; transition: all .15s ease; box-shadow: 0 1px 2px rgba(0,0,0,.15); }
+.app.detail-col #splitResize::after { left: 50%; top: 50%; transform: translate(-50%, -50%); width: 44px; height: 4px; }
+.app.detail-row #splitResize::after { left: 50%; top: 50%; transform: translate(-50%, -50%); width: 4px; height: 44px; }
+/* Hover and drag highlight */
+#splitResize:hover, #splitResize.drag { background: color-mix(in srgb, var(--accent) 18%, var(--soft2)); border-color: var(--accent); }
+#splitResize:hover::after, #splitResize.drag::after { background: var(--accent); opacity: 1; box-shadow: 0 0 8px var(--accent); }
+.app.detail-col #splitResize:hover::after, .app.detail-col #splitResize.drag::after { height: 5px; width: 54px; }
+.app.detail-row #splitResize:hover::after, .app.detail-row #splitResize.drag::after { width: 5px; height: 54px; }
+
+/* Global dragging states to prevent text selection and cursor flickering */
+body.resizing-col { cursor: col-resize !important; user-select: none !important; }
+body.resizing-row { cursor: row-resize !important; user-select: none !important; }
+body.resizing-active { user-select: none !important; cursor: nwse-resize !important; }
+
+table.net { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
+table.net thead th { position: sticky; top: 0; background: var(--panel); text-align: left; padding: 7px 10px; color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--line); z-index: 1; font-size: 11px; text-transform: uppercase; letter-spacing: .03em; white-space: nowrap; }
+table.net td { padding: 6px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; vertical-align: middle; }
+table.net td.name { max-width: 0; width: 44%; overflow: hidden; text-overflow: ellipsis; }
+table.net tbody tr { cursor: pointer; }
+table.net tbody tr:hover { background: var(--row-hover); }
+table.net tr.sel { background: color-mix(in srgb, var(--accent) 16%, transparent); box-shadow: inset 2px 0 0 var(--accent); }
+table.net tr.live { opacity: .72; }
+
+/* Name cell: host dimmed, path emphasised, so the endpoint reads instantly. */
+.nm { display: inline-flex; align-items: baseline; gap: 0; max-width: calc(100% - 28px); overflow: hidden; vertical-align: middle; }
+.nm .host { color: var(--muted); }
+.nm .path { color: var(--fg); font-weight: 600; }
+.nm.lock::before { content: "🔒"; font-size: 10px; margin-right: 5px; opacity: .8; }
+.nm.plain::before { content: "⚠"; font-size: 11px; margin-right: 5px; color: var(--warn); }
+.nm:not(:has(.path)) .host,
+.nm .host:only-child { color: var(--fg); font-weight: 600; }
+
+/* Method + status badges */
+.m { display: inline-block; min-width: 46px; text-align: center; padding: 2px 6px; border-radius: 5px; font-size: 10px; font-weight: 700; letter-spacing: .02em; color: #fff; }
+.m-GET { background: #16a34a; } .m-POST { background: #d97706; } .m-PUT { background: #2563eb; }
+.m-DELETE { background: #dc2626; } .m-PATCH { background: #7c3aed; } .m-HEAD, .m-OPTIONS { background: #64748b; }
+.m-WSS, .m-WS { background: #0891b2; }
+.m-Q { background: #475569; } .m-TLS, .m-TCP, .m-UDP { background: #64748b; }
+.pill { display: inline-flex; align-items: center; gap: 5px; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.st-1 { color: #0891b2; background: color-mix(in srgb, #0891b2 15%, transparent); }
+.st-2 { color: var(--ok); background: color-mix(in srgb, var(--ok) 15%, transparent); }
+.st-3 { color: var(--accent); background: color-mix(in srgb, var(--accent) 15%, transparent); }
+.st-4 { color: var(--err); background: color-mix(in srgb, var(--err) 15%, transparent); }
+.st-5 { color: var(--err); background: color-mix(in srgb, var(--err) 15%, transparent); }
+.st-pending { color: var(--muted); background: color-mix(in srgb, var(--muted) 15%, transparent); }
+.st-pending::before { animation: pulse 1.2s infinite; }
+.st-tls, .st-done { color: var(--muted); background: color-mix(in srgb, var(--muted) 14%, transparent); }
+
+/* Star / Pin button & Pinned rows */
+.star-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--muted);
+  opacity: .4;
+  cursor: pointer;
+  transition: opacity .15s, color .15s, transform .15s, background .15s, border-color .15s;
+  user-select: none;
+  border-radius: 5px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+table.net tbody tr:hover .star-btn {
+  opacity: .85;
+  color: #eab308;
+  border-color: color-mix(in srgb, #eab308 30%, transparent);
+  background: color-mix(in srgb, #eab308 10%, transparent);
+}
+.star-btn:hover {
+  opacity: 1 !important;
+  color: #fbbf24 !important;
+  border-color: #eab308 !important;
+  background: color-mix(in srgb, #eab308 25%, transparent) !important;
+  transform: scale(1.2);
+}
+.star-btn.on {
+  opacity: 1;
+  color: #f59e0b;
+  border-color: color-mix(in srgb, #f59e0b 40%, transparent);
+  background: color-mix(in srgb, #f59e0b 16%, transparent);
+  text-shadow: 0 0 8px rgba(245, 158, 11, .6);
+}
+table.net tr.pinned {
+  background: color-mix(in srgb, #eab308 8%, transparent);
+  box-shadow: inset 2px 0 0 #eab308;
+}
+table.net tr.pinned td.name .path {
+  color: #fbbf24;
+}
+table.net tr.pinned.sel {
+  background: color-mix(in srgb, var(--accent) 18%, color-mix(in srgb, #eab308 12%, transparent));
+}
+
+
+/* WebSocket messages */
+.ws-msg-list { display: flex; flex-direction: column; gap: 8px; padding: 10px; }
+.ws-msg { border: 1px solid var(--line); border-radius: 8px; background: var(--soft); overflow: hidden; }
+.ws-msg.send { border-left: 3px solid var(--ok); }
+.ws-msg.recv { border-left: 3px solid var(--accent); }
+.ws-msg-head { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: var(--soft2); font-size: 11px; }
+.ws-dir { font-weight: 700; }
+.ws-msg.send .ws-dir { color: var(--ok); }
+.ws-msg.recv .ws-dir { color: var(--accent); }
+.ws-time { color: var(--muted); margin-left: auto; }
+.ws-len { color: var(--muted); font-size: 11px; }
+.ws-msg pre.body { margin: 0; padding: 8px 10px; max-height: 240px; overflow: auto; background: var(--panel); border: none; }
+
+/* Duration cell: number + a proportional micro-bar coloured by speed. */
+.dur { display: inline-flex; align-items: center; gap: 7px; }
+.dur .n { min-width: 48px; text-align: right; }
+.dur .track { width: 54px; height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.dur .track > i { display: block; height: 100%; border-radius: 3px; background: var(--ok); }
+.dur.slow .track > i { background: var(--warn); } .dur.vslow .track > i { background: var(--err); }
+
+/* Waterfall */
+.wf { position: relative; height: 14px; min-width: 90px; }
+.wf > i { position: absolute; top: 4px; height: 6px; border-radius: 3px; background: var(--accent); opacity: .85; }
+.wf > i.ttfb { opacity: .4; }
+.wf.https > i { background: var(--ok); } .wf.http > i { background: var(--warn); } .wf.dns > i, .wf.udp > i, .wf.tcp > i { background: var(--muted); }
+
+#netEmpty { padding: 24px 14px; text-align: center; }
+#netEmpty .big { font-size: 13px; color: var(--fg); font-weight: 600; margin-bottom: 4px; }
+
+/* Imported-cURL marker on its row + detail */
+.nm.imported::before { content: "⎀"; margin-right: 5px; color: var(--accent); font-weight: 700; }
+tr.imported-row { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+tr.imported-row.sel { background: color-mix(in srgb, var(--accent) 18%, transparent); }

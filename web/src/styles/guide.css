@@ -1,0 +1,30 @@
+/* API view empty state + "connect your app" guide (also in the guide popup). */
+
+.empty-debug { display: flex; flex-direction: column; align-items: stretch; gap: 16px; max-width: 880px; margin: 0 auto; padding: 32px 20px 48px; text-align: left; }
+.dg-header { text-align: center; }
+.dg-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.dg-subtitle { font-size: 13px; color: var(--muted); }
+
+.guide { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.guide-step { display: flex; flex-direction: column; gap: 12px; min-width: 0; padding: 16px 18px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
+.gs-head { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; }
+.step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.guide-step > .seg { align-self: flex-start; flex-wrap: wrap; }
+
+.endpoint { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.endpoint code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; font-weight: 700; color: var(--accent); background: var(--soft); border: 1px solid var(--line); border-radius: 8px; padding: 5px 10px; }
+.endpoint-note { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+.endpoint-note code, .guide-desc code { font-family: 'JetBrains Mono', ui-monospace, monospace; color: var(--fg); font-weight: 600; }
+
+.guide-tabs { display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid var(--line); }
+.guide-tab { border: none; border-bottom: 2px solid transparent; border-radius: 0; background: transparent; padding: 8px 12px; margin-bottom: -1px; font-size: 12.5px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.guide-tab:hover { color: var(--fg); background: transparent; }
+.guide-tab.on { color: var(--accent); border-bottom-color: var(--accent); }
+.guide-pane { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.guide-desc { margin: 0; font-size: 12.5px; line-height: 1.6; color: var(--fg); }
+
+.code-wrap { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--panel); min-width: 0; }
+.code-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 5px 6px 5px 12px; background: var(--soft); border-bottom: 1px solid var(--line); font-size: 11.5px; font-weight: 600; color: var(--muted); }
+.code-head span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.code-head .ibtn { height: 24px; }
+.code-wrap pre { margin: 0; padding: 12px 14px; max-height: 340px; overflow: auto; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; line-height: 1.6; white-space: pre; }

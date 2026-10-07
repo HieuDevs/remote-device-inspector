@@ -1,0 +1,70 @@
+/* Shared controls: icon buttons, segmented switches, popover menus, status pill. */
+
+svg.lucide { flex-shrink: 0; }
+
+.ibtn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 28px; min-width: 28px; padding: 0 8px; border-radius: 7px; line-height: 1; white-space: nowrap; font-size: 12px; font-weight: 600; }
+.ibtn.square { padding: 0; width: 28px; }
+.ibtn.ghost { border-color: transparent; color: var(--muted); }
+.ibtn.ghost:hover { color: var(--fg); background: var(--soft); }
+.ibtn.active { color: #eab308; border-color: color-mix(in srgb, #eab308 50%, transparent); background: color-mix(in srgb, #eab308 12%, transparent); }
+.ibtn.done { color: var(--ok); border-color: var(--ok); }
+
+.seg { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--line); border-radius: 8px; background: var(--soft); }
+.seg > button { display: inline-flex; align-items: center; gap: 6px; border: none; background: transparent; color: var(--muted); padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.seg > button:hover { color: var(--fg); background: transparent; }
+.seg > button.on { background: var(--panel); color: var(--fg); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.seg.small > button { padding: 2px 8px; font-size: 11px; }
+
+/* Popover menu */
+.menu-wrap { position: relative; display: inline-flex; }
+.menu { position: absolute; top: calc(100% + 6px); right: 0; z-index: 60; min-width: 220px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 6px; box-shadow: 0 14px 36px rgba(0,0,0,.35); display: flex; flex-direction: column; gap: 2px; }
+.menu.left { right: auto; left: 0; }
+.menu-item { display: flex; align-items: center; gap: 9px; width: 100%; padding: 7px 10px; border: none; border-radius: 6px; background: transparent; color: var(--fg); font-size: 12px; font-weight: 500; text-align: left; cursor: pointer; }
+.menu-item:hover { background: var(--accent); color: #fff; }
+.menu-item.done { color: var(--ok); }
+.menu-sep { height: 1px; background: var(--line); margin: 4px 2px; }
+.menu-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 4px 6px 4px 10px; font-size: 12px; }
+
+/* Status pill (header) */
+.status { display: inline-flex; align-items: center; gap: 7px; margin-left: auto; padding: 4px 10px; border-radius: 999px; background: var(--soft); color: var(--muted); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+.status.ok { color: var(--ok); background: color-mix(in srgb, var(--ok) 12%, transparent); }
+.status.ok::before { background: var(--ok); box-shadow: 0 0 6px var(--ok); }
+.status.warn { color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); }
+.status.warn::before { background: var(--warn); }
+
+/* Filter syntax popover */
+.filter-help { width: 300px; padding: 10px 12px; gap: 6px; }
+.filter-help code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11.5px; color: var(--accent); }
+.filter-help .fh-row { display: grid; grid-template-columns: 112px 1fr; gap: 8px; font-size: 12px; align-items: baseline; }
+.filter-help .fh-row span { color: var(--muted); }
+
+/* Panel footer summary */
+.net-foot { display: flex; align-items: center; gap: 14px; padding: 5px 12px; border-top: 1px solid var(--line); background: var(--soft); font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; overflow-x: auto; }
+.net-foot b { color: var(--fg); font-weight: 600; }
+.net-foot .err b { color: var(--err); }
+
+/* Remote screen: waiting for a session */
+.connect-card { width: 360px; max-width: 100%; align-self: center; margin: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 22px 22px 18px; box-shadow: 0 10px 25px -5px rgba(0,0,0,.12); }
+.connect-card h2 { margin: 0 0 4px; font-size: 16px; }
+.connect-card p { margin: 0 0 14px; color: var(--muted); font-size: 12.5px; }
+.connect-card ol { margin: 0 0 16px; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+.connect-card form { display: flex; gap: 8px; }
+.connect-card input { flex: 1; min-width: 0; font: inherit; font-size: 16px; letter-spacing: .18em; text-align: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: inherit; }
+.connect-card input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+.connect-card .err { color: var(--err); font-size: 12px; margin-top: 8px; min-height: 16px; }
+.remote-keys { display: flex; flex-direction: column; gap: 6px; }
+.remote-keys .ibtn { justify-content: flex-start; height: 32px; padding: 0 12px; }
+.remote-keys .hint { max-width: 22ch; line-height: 1.6; }
+#stage[hidden] { display: none; }
+
+/* Network toolbar */
+.net-tools .search { flex: 1 1 200px; min-width: 140px; display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 4px 0 9px; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); color: var(--muted); }
+.net-tools .search:focus-within { border-color: var(--accent); }
+.net-tools .search input { flex: 1; min-width: 0; border: none; outline: none; background: transparent; color: var(--fg); font: inherit; font-size: 12.5px; }
+.net-tools .search .ibtn { height: 22px; width: 22px; min-width: 22px; }
+.net-tools .tools-sp { flex: 1 0 0; }
+.rec-btn .rec-pause { display: none; }
+.rec-btn:hover .rec-pause { display: block; }
+.rec-btn.paused { color: var(--warn); border-color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); }
+.context-menu.menu { position: fixed; top: auto; right: auto; min-width: 200px; }

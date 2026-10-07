@@ -1,0 +1,61 @@
+/* Body viewer: header (kind · size, view switch, copy/download), search, view */
+.body-wrap { display: flex; flex-direction: column; min-height: 0; }
+.bhead { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 0 0 6px; }
+.bhead .sec-title { margin: 0; }
+.bhead .bsp { flex: 1; }
+.bhead .copy { float: none; }
+.bkind { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.bviews { display: inline-flex; gap: 1px; padding: 2px; border: 1px solid var(--line); border-radius: 7px; background: var(--soft); }
+.bviews button { border: none; background: transparent; color: var(--muted); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 5px; cursor: pointer; }
+.bviews button:hover { color: var(--fg); }
+.bviews button.on { background: var(--panel); color: var(--fg); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.bnote { font-size: 12px; color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); border-radius: 8px; padding: 6px 10px; margin: 0 0 6px; }
+.body-search[hidden] { display: none; }
+.bview { margin: 0; padding: 10px 12px; background: var(--soft); border: 1px solid var(--line); border-radius: 10px; max-height: 320px; overflow: auto; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; line-height: 1.55; }
+.bview pre { margin: 0; font: inherit; white-space: pre-wrap; word-break: break-word; }
+.bview.v-hex pre { white-space: pre; word-break: normal; }
+.bmore { margin-top: 8px; font-size: 11px; }
+/* JSON tree: ▸ folds a node; long strings wrap instead of being cut. */
+.jtree .jl { position: relative; padding-left: 14px; white-space: pre-wrap; word-break: break-word; }
+.jtree .jt { position: absolute; left: 0; top: 0; width: 14px; cursor: pointer; color: var(--muted); user-select: none; }
+.jtree .jt::before { content: "▾"; }
+.jtree .jt:hover { color: var(--accent); }
+.jtree .j-sum { display: none; color: var(--muted); }
+.jtree .jn.closed > .jl > .jt::before { content: "▸"; }
+.jtree .jn.closed > .jl > .j-sum { display: inline; }
+.jtree .jn.closed > .jc, .jtree .jn.closed > .jcl { display: none; }
+/* SSE events / NDJSON lines */
+.bview.v-events, .bview.v-lines { padding: 6px; }
+.ev { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); margin-bottom: 6px; overflow: hidden; }
+.ev:last-child { margin-bottom: 0; }
+.ev-head { display: flex; align-items: center; gap: 8px; padding: 4px 8px; background: var(--soft2); font-size: 11px; }
+.ev-n { color: var(--muted); font-variant-numeric: tabular-nums; }
+.ev-tag { font-weight: 700; color: var(--accent); }
+.ev-tag.dim { color: var(--muted); font-weight: 600; }
+.ev-meta { color: var(--muted); }
+.ev-meta.warn { color: var(--warn); }
+.ev > pre, .ev > .jtree { padding: 6px 8px; }
+.ev-com { color: var(--muted); }
+/* Previews */
+.bview.v-preview { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 8px; }
+.bimg { max-width: 100%; padding: 8px; border-radius: 8px; background-color: #fff; background-image: linear-gradient(45deg, #e5e7eb 25%, transparent 25%, transparent 75%, #e5e7eb 75%), linear-gradient(45deg, #e5e7eb 25%, transparent 25%, transparent 75%, #e5e7eb 75%); background-size: 16px 16px; background-position: 0 0, 8px 8px; }
+.bimg img { display: block; max-width: 100%; max-height: 60vh; object-fit: contain; }
+.bimg-meta { font-size: 11px; color: var(--muted); font-family: inherit; }
+.bframe { width: 100%; flex: 1; min-height: 320px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+.bview.v-preview:has(.bframe) { align-items: stretch; padding: 6px; }
+.bvideo { max-width: 100%; max-height: 60vh; }
+
+/* In-body search bar (shown above every response/request body) */
+.body-search { display: flex; align-items: center; gap: 6px; margin: 0 0 6px; }
+.body-search input { flex: 1; min-width: 0; font: inherit; font-size: 12px; padding: 4px 9px; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); color: inherit; }
+.body-search input:focus { outline: none; border-color: var(--accent); }
+.body-search .bs-count { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; min-width: 54px; text-align: right; }
+.body-search button { padding: 3px 8px; font-size: 12px; line-height: 1; border-radius: 6px; }
+/* Search hits (CSS Custom Highlight API, see lib/body/search.ts) */
+::highlight(body-hit) { background-color: #fde68a; color: #111; }
+::highlight(body-hit-active) { background-color: #f59e0b; color: #111; }
+@media (prefers-color-scheme: dark) { ::highlight(body-hit) { background-color: #a16207; color: #fff; } }
+
+/* JSON syntax highlight */
+.j-key { color: #2563eb; } .j-str { color: #16a34a; } .j-num { color: #b45309; } .j-bool { color: #7c3aed; } .j-null { color: #94a3b8; }
+@media (prefers-color-scheme: dark) { .j-key { color: #60a5fa; } .j-str { color: #4ade80; } .j-num { color: #fbbf24; } .j-bool { color: #c4b5fd; } }

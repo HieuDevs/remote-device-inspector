@@ -1,0 +1,21 @@
+{
+  "name": "remote-device-inspector",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Remote Device & API Network Inspector: Android agent + relay server + web dashboard",
+  "packageManager": "bun@1.4.2",
+  "workspaces": [
+    "server",
+    "web"
+  ],
+  "scripts": {
+    "dev": "bun run --parallel --filter '@rdi/*' dev",
+    "build": "bun run --filter @rdi/web build && bun run --filter @rdi/server build",
+    "start": "bun run --cwd server start",
+    "typecheck": "bun run --filter '@rdi/*' typecheck"
+  },
+  "engines": {
+    "bun": ">=1.4",
+    "node": ">=20.19"
+  }
+}
