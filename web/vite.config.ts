@@ -2,7 +2,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// In dev the relay runs on HTTP_PORT (default 8080, `npm run dev -w server`);
+// In dev the relay runs on HTTP_PORT (default 8080, `bun run --cwd server dev`);
 // Vite proxies the relay's endpoints so the dashboard behaves exactly as when
 // the relay serves it.
 const RELAY = process.env.RELAY_URL || `http://localhost:${process.env.HTTP_PORT || 8080}`;
